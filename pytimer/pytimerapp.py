@@ -21,6 +21,7 @@ class PyTimerApp(Application):
 
         self.menu = [
             self.start_opt,
+            (u"Stop", self.stop),
             (u"Set timer", self.set_timer),
             (u"Exit", self.close_app)
         ]
@@ -32,10 +33,16 @@ class PyTimerApp(Application):
         Application.__init__(self, PyTimerApp.APP_TITLE,
                             self.draw.canvas,
                             self.menu)
+        self.init_controls()
         self.draw_scene()
 
     def update_ui(self):
         self.set_ui(PyTimerApp.APP_TITLE, self.draw.canvas, self.menu)
+
+    def init_controls(self):
+        self.draw.canvas.bind(key_codes.EScancode4, self.stop)
+        self.draw.canvas.bind(key_codes.EScancode6, self.set_timer)
+        self.pause_controls()
 
     def start_controls(self):
         self.menu[0] = self.pause_opt
@@ -43,17 +50,19 @@ class PyTimerApp(Application):
         self.draw.canvas.bind(key_codes.EScancode5, self.pause)
 
     def start(self):
+        self.pause_flag = False
         self.start_controls()
         cd_sec = timeutils.to_sec(self.curr_time)
 
         for curr_sec in reversed(range(cd_sec)):
             if self.pause_flag:
-                self.pause_flag = False
                 break
 
             self.curr_time = timeutils.to_str(curr_sec)
             self.draw_scene()
             e32.ao_sleep(1)
+
+        self.pause_controls()
 
     def pause_controls(self):
         self.menu[0] = self.start_opt
@@ -62,7 +71,11 @@ class PyTimerApp(Application):
 
     def pause(self):
         self.pause_flag = True
-        self.pause_controls()
+
+    def stop(self):
+        self.pause()
+        self.curr_time = self.start_time
+        self.draw_scene()
 
     def set_timer(self):
         new_time = appuifw.query(u"Set time (hh:mm:ss):", "text", self.start_time)

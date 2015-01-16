@@ -40,3 +40,4 @@ class Draw(DrawBase):
                       tvalue,
                       Draw.TIMER_COLOR,
                       Draw.TIMER_FONT)
+
