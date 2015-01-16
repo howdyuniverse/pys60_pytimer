@@ -88,6 +88,8 @@ class PyTimerApp(Application):
     def draw_scene(self):
         self.draw.clear()
         self.draw.timer(self.curr_time)
+        self.draw.progress(timeutils.to_sec(self.curr_time),
+                            timeutils.to_sec(self.start_time))
         self.draw.redraw()
 
     def close_app(self):

@@ -26,6 +26,8 @@ class Draw(DrawBase):
 
     TIMER_COLOR = (0, 0, 0)
     TIMER_FONT = (u"Nokia Sans S60", 54)
+    PROGRESS_BGCOLOR = (200, 200, 200)
+    PROGRESS_COLOR = (0, 0, 0)
 
     def __init__(self):
         DrawBase.__init__(self)
@@ -41,3 +43,18 @@ class Draw(DrawBase):
                       Draw.TIMER_COLOR,
                       Draw.TIMER_FONT)
 
+    def progress(self, curr_time, start_time):
+        # full line width
+        fline_w = self.swidth - 40
+
+        bg_coord = (20, self.sheight*0.5, 20+fline_w, self.sheight*0.5+20)
+        self.buf.rectangle(bg_coord, fill=Draw.PROGRESS_BGCOLOR)
+
+        # calc current width of the progress line
+        if start_time != 0:
+            cline_w = fline_w * ((curr_time / float(start_time) * 100.) / 100.)
+        else:
+            cline_w = 0
+        
+        li_coord = (20, self.sheight*0.5, 20+cline_w, self.sheight*0.5+20)
+        self.buf.rectangle(li_coord, fill=Draw.PROGRESS_COLOR)
