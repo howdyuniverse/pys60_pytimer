@@ -11,10 +11,11 @@ from draw import Draw
 
 class PyTimerApp(Application):
 
-    APP_TITLE = u"PyTimer"
+    TITLE = u"PyTimer"
 
     def __init__(self):
         appuifw.app.screen = "full"
+        appuifw.app.exit_key_handler
 
         self.start_opt = (u"Start", self.start)
         self.pause_opt = (u"Pause", self.pause)
@@ -26,18 +27,23 @@ class PyTimerApp(Application):
             (u"Exit", self.close_app)
         ]
         self.draw = Draw()
-        self.start_time = u"00:00:00"
+        self.start_time = u"00:01:00"
         self.curr_time = self.start_time
         self.pause_flag = False
 
-        Application.__init__(self, PyTimerApp.APP_TITLE,
-                            self.draw.canvas,
-                            self.menu)
+        Application.__init__(self,
+                            title=PyTimerApp.TITLE,
+                            body=self.draw.canvas,
+                            menu=self.menu,
+                            exit_handler=self.close_app)
         self.init_controls()
         self.draw_scene()
 
     def update_ui(self):
-        self.set_ui(PyTimerApp.APP_TITLE, self.draw.canvas, self.menu)
+        self.set_ui(PyTimerApp.TITLE,
+                    self.draw.canvas,
+                    self.menu,
+                    self.close_app)
 
     def init_controls(self):
         self.draw.canvas.bind(key_codes.EScancode4, self.stop)
@@ -80,10 +86,15 @@ class PyTimerApp(Application):
     def set_timer(self):
         new_time = appuifw.query(u"Set time (hh:mm:ss):", "text", self.start_time)
 
+        if new_time is None:
+            return
+
         if timeutils.check_strtime(new_time):
             self.start_time = new_time 
             self.curr_time = self.start_time
             self.draw_scene()
+        else:
+            appuifw.note(u"Wrong time format", "error")
 
     def draw_scene(self):
         self.draw.clear()

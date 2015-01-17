@@ -1,5 +1,6 @@
 import time
 
+
 def to_sec(strtime):
     """ Convert time (str) to seconds (int)
     Args:
@@ -10,6 +11,7 @@ def to_sec(strtime):
     hh, mm, ss = map(int, strtime.split(":"))
     return (hh * 3600) + (mm * 60) + ss
 
+
 def to_str(seconds):
     """ Convert seconds (int) to time (str)
     Args:
@@ -19,6 +21,7 @@ def to_str(seconds):
     """
     return unicode(time.strftime("%H:%M:%S", time.gmtime(seconds)))
 
+
 def check_strtime(str_time):
     """ Check if string value is time in format "hh:mm:ss"
     Args:
@@ -26,4 +29,8 @@ def check_strtime(str_time):
     Returns:
         True or False
     """
+    try:
+        time.strptime(str_time, "%H:%M:%S")
+    except:
+        return False
     return True

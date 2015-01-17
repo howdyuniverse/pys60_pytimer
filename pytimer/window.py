@@ -685,7 +685,7 @@ class Application(Window):
         app.title = old_title
         app.menu = []
         app.body = None
-        #app.set_exit()        
+        app.set_exit()
 
 class Dialog(Window):
     """ This class is in the charge of showing/hiding dialogs when necessary.

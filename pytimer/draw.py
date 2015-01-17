@@ -25,16 +25,15 @@ class DrawBase(object):
 class Draw(DrawBase):
 
     TIMER_COLOR = (0, 0, 0)
-    TIMER_FONT = (u"Nokia Sans S60", 54)
-    PROGRESS_BGCOLOR = (200, 200, 200)
-    PROGRESS_COLOR = (0, 0, 0)
+    TIMER_FONT = (u"Series 60 ZDigi", 54)
+    PROGRS_BGCOLOR = (200, 200, 200)
+    PROGRS_COLOR = (0, 0, 0)
 
     def __init__(self):
         DrawBase.__init__(self)
 
     def timer(self, tvalue):
-        """
-            Drawing timer value
+        """ Drawing timer value
             Args:
                 tvalue (unicode): timer value
         """
@@ -44,11 +43,16 @@ class Draw(DrawBase):
                       Draw.TIMER_FONT)
 
     def progress(self, curr_time, start_time):
+        """ Drawing progress line
+        Args:
+            curr_time (int): current time in seconds
+            start_time (int): starting time in seconds (represents 100% of time)
+        """
         # full line width
         fline_w = self.swidth - 40
 
         bg_coord = (20, self.sheight*0.5, 20+fline_w, self.sheight*0.5+20)
-        self.buf.rectangle(bg_coord, fill=Draw.PROGRESS_BGCOLOR)
+        self.buf.rectangle(bg_coord, fill=Draw.PROGRS_BGCOLOR)
 
         # calc current width of the progress line
         if start_time != 0:
@@ -57,4 +61,4 @@ class Draw(DrawBase):
             cline_w = 0
         
         li_coord = (20, self.sheight*0.5, 20+cline_w, self.sheight*0.5+20)
-        self.buf.rectangle(li_coord, fill=Draw.PROGRESS_COLOR)
+        self.buf.rectangle(li_coord, fill=Draw.PROGRS_COLOR)
