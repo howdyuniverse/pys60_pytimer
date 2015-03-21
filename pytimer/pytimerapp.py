@@ -3,8 +3,10 @@ import e32
 import appuifw
 import graphics
 import key_codes
+import miso
 
 import timeutils
+
 from window import Application
 from draw import Draw
 
@@ -22,7 +24,7 @@ class PyTimerApp(Application):
 
         self.menu = [
             self.start_opt,
-            (u"Stop", self.stop),
+            (u"Reset", self.reset),
             (u"Set timer", self.set_timer),
             (u"Exit", self.close_app)
         ]
@@ -46,7 +48,7 @@ class PyTimerApp(Application):
                     self.close_app)
 
     def init_controls(self):
-        self.draw.canvas.bind(key_codes.EScancode4, self.stop)
+        self.draw.canvas.bind(key_codes.EScancode4, self.reset)
         self.draw.canvas.bind(key_codes.EScancode6, self.set_timer)
         self.pause_controls()
 
@@ -56,6 +58,9 @@ class PyTimerApp(Application):
         self.draw.canvas.bind(key_codes.EScancode5, self.pause)
 
     def start(self):
+        if self.curr_time == "00:00:00":
+            return
+
         self.pause_flag = False
         self.start_controls()
         cd_sec = timeutils.to_sec(self.curr_time)
@@ -68,6 +73,9 @@ class PyTimerApp(Application):
             self.draw_scene()
             e32.ao_sleep(1)
 
+        if self.curr_time == "00:00:00":
+            miso.vibrate(1000, 50)
+
         self.pause_controls()
 
     def pause_controls(self):
@@ -78,7 +86,7 @@ class PyTimerApp(Application):
     def pause(self):
         self.pause_flag = True
 
-    def stop(self):
+    def reset(self):
         self.pause()
         self.curr_time = self.start_time
         self.draw_scene()
@@ -101,6 +109,7 @@ class PyTimerApp(Application):
         self.draw.timer(self.curr_time)
         self.draw.progress(timeutils.to_sec(self.curr_time),
                             timeutils.to_sec(self.start_time))
+        self.draw.controls()
         self.draw.redraw()
 
     def close_app(self):
