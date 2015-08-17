@@ -8,4 +8,4 @@
 - 6 - set time
 
 #### Dependencies
-- [miso](https://github.com/contextlogger/miso)
+- [miso](https://github.com/contextlogger/miso) builds: http://contextlogger.org/miso/download/
